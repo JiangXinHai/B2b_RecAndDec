@@ -1,5 +1,14 @@
 QT       += core gui
 
+# 必须添加：网络模块（解决QTcpSocket/QTcpServer）
+QT += network
+
+# 必须添加：串口模块（解决QSerialPort）
+QT += serialport
+
+# 带UI的项目，还需要widgets模块
+QT += widgets
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
@@ -18,16 +27,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     Communicator.cpp \
     Decoder.cpp \
+    Reciver.cpp \
     main.cpp \
     mainwindow.cpp \
-    reciver.cpp \
     utils.cpp
 
 HEADERS += \
     Communicator.h \
     Decoder.h \
+    Reciver.h \
     mainwindow.h \
-    reciver.h \
     utils.h
 
 FORMS += \
