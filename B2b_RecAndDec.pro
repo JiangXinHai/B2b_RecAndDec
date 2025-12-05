@@ -17,12 +17,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     Communicator.cpp \
+    Decoder.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    reciver.cpp \
+    utils.cpp
 
 HEADERS += \
     Communicator.h \
-    mainwindow.h
+    Decoder.h \
+    mainwindow.h \
+    reciver.h \
+    utils.h
 
 FORMS += \
     mainwindow.ui
