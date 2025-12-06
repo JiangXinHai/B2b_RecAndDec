@@ -1,4 +1,4 @@
-#include "reciver.h"
+﻿#include "Reciver.h"
 
 Reciver::Reciver()
 {

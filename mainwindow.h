@@ -28,7 +28,7 @@ private slots:
 
     // 通讯器信号槽函数
     void onDataReady(const QByteArray &rawData);
-    void onErrorOccurred(const QString &errorMsg);
+    void onCommunicateRecoder(const QString &comMsg);
     void onStateChanged(bool isRunning);
 
 private:

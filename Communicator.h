@@ -13,7 +13,7 @@
  * @class Communicator
  * @brief 通讯层核心类，统一封装文件、TCP服务器（客户端模式）、串口三种种数据输入方式
  * @details 对外提供统一的启动/停止接口，内部根据配置适配不同通讯方式，
- *          原始数据通过dataReady信号对外发送，错误信息通过errorOccurred信号反馈
+ *          原始数据通过dataReady信号对外发送，通讯层日志通过comMsg信号反馈
  * @author 江鑫海
  * @date 2025-12-05
  */
@@ -97,11 +97,11 @@ signals:
     void dataReady(const QByteArray &rawData);
 
     /**
-     * @brief 错误发生信号
-     * @param errorMsg 错误描述信息
-     * @details 通讯过程中所有错误均通过此信号对外反馈
+     * @brief 通讯器日志信号
+     * @param comMsg 错误描述信息
+     * @details 通讯过程中所有日志均通过此信号对外反馈
      */
-    void errorOccurred(const QString &errorMsg);
+    void communicateRecoder(const QString &comMsg);
 
     /**
      * @brief 通讯状态变化信号

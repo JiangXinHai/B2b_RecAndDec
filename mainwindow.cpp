@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // 通讯器信号
     connect(m_communicator, &Communicator::dataReady, this, &MainWindow::onDataReady);
-    connect(m_communicator, &Communicator::errorOccurred, this, &MainWindow::onErrorOccurred);
+    connect(m_communicator, &Communicator::communicateRecoder, this, &MainWindow::onCommunicateRecoder);
     connect(m_communicator, &Communicator::stateChanged, this, &MainWindow::onStateChanged);
 }
 
@@ -52,25 +52,12 @@ void MainWindow::onStartBtnClicked()
     }
 
     // 启动通讯
-    bool success = m_communicator->startCommunication(type, config);
-    if (success) {
-        ui->te_Log->append(QString("[%1] 启动%2模式成功")
-                          .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"))
-                          .arg(type == Communicator::CommunicationType::File ? "文件" :
-                               (type == Communicator::CommunicationType::TcpClient ? "TCP客户端" : "串口")));
-    } else {
-        ui->te_Log->append(QString("[%1] 启动%2模式失败")
-                          .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"))
-                          .arg(type == Communicator::CommunicationType::File ? "文件" :
-                               (type == Communicator::CommunicationType::TcpClient ? "TCP客户端" : "串口")));
-    }
+    m_communicator->startCommunication(type, config);
 }
 
 void MainWindow::onStopBtnClicked()
 {
     m_communicator->stopCommunication();
-    ui->te_Log->append(QString("[%1] 手动停止通讯")
-                      .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")));
 }
 
 void MainWindow::onBrowseFileBtnClicked()
@@ -96,11 +83,11 @@ void MainWindow::onDataReady(const QByteArray &rawData)
     scroll->setValue(scroll->maximum());
 }
 
-void MainWindow::onErrorOccurred(const QString &errorMsg)
+void MainWindow::onCommunicateRecoder(const QString &comMsg)
 {
-    ui->te_Log->append(QString("[%1] 【错误】%2")
+    ui->te_Log->append(QString("[%1] 【Communicator】%2")
                       .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"))
-                      .arg(errorMsg));
+                      .arg(comMsg));
 
     // 自动滚动到底部
     QScrollBar *scroll = ui->te_Log->verticalScrollBar();
@@ -113,14 +100,6 @@ void MainWindow::onStateChanged(bool isRunning)
     ui->btn_Start->setEnabled(!isRunning);
     ui->btn_Stop->setEnabled(isRunning);
 
-    // 日志提示
-    if (isRunning) {
-        ui->te_Log->append(QString("[%1] 通讯已启动")
-                          .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")));
-    } else {
-        ui->te_Log->append(QString("[%1] 通讯已停止")
-                          .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")));
-    }
 }
 
 // ========== 构建配置参数 ==========
