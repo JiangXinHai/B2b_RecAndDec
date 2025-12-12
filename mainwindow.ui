@@ -260,9 +260,9 @@
           <property name="font">
            <font>
             <family>微软雅黑</family>
-            <pointsize>10</pointsize>
-            <weight>50</weight>
-            <bold>false</bold>
+            <pointsize>12</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
            </font>
           </property>
           <property name="title">
@@ -273,6 +273,13 @@
             <layout class="QHBoxLayout" name="horizontalLayout_4">
              <item>
               <widget class="QLabel" name="label">
+               <property name="font">
+                <font>
+                 <pointsize>10</pointsize>
+                 <weight>50</weight>
+                 <bold>false</bold>
+                </font>
+               </property>
                <property name="text">
                 <string>服务器IP：</string>
                </property>
@@ -280,6 +287,13 @@
              </item>
              <item>
               <widget class="QLineEdit" name="editIcpIp">
+               <property name="font">
+                <font>
+                 <pointsize>10</pointsize>
+                 <weight>50</weight>
+                 <bold>false</bold>
+                </font>
+               </property>
                <property name="styleSheet">
                 <string notr="true"/>
                </property>
@@ -448,7 +462,7 @@
                 </font>
                </property>
                <property name="currentText">
-                <string>115200</string>
+                <string>9600</string>
                </property>
                <item>
                 <property name="text">
@@ -686,7 +700,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
