@@ -1,5 +1,7 @@
 ﻿#include "mainwindow.h"
 
+//已完成通讯层
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)  // 初始化UI对象
