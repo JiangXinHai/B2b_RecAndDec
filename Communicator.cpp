@@ -55,7 +55,7 @@ bool Communicator::startCommunication(CommunicationType type, const Config &conf
         initSuccess = initSerialPortCommunication(config);
         break;
     default:
-        emit communicateRecoder("不支持的通讯类型");
+        emit communicateLog("不支持的通讯类型");
         return false;
     }
 
@@ -63,7 +63,7 @@ bool Communicator::startCommunication(CommunicationType type, const Config &conf
     m_isRunning = initSuccess;
     emit stateChanged(m_isRunning);
     if (!initSuccess) {
-        emit communicateRecoder(QString("启动%1模式失败").arg(QString::fromStdString(std::to_string(static_cast<int>(type)))));
+        emit communicateLog(QString("启动%1模式失败").arg(QString::fromStdString(std::to_string(static_cast<int>(type)))));
     }
 
     return initSuccess;
@@ -89,7 +89,7 @@ void Communicator::stopCommunication()
     // 更新状态并发送信号
     m_isRunning = false;
     emit stateChanged(false);
-    emit communicateRecoder("通讯已停止");
+    emit communicateLog("通讯已停止");
 }
 
 /**
@@ -99,17 +99,17 @@ void Communicator::stopCommunication()
  */
 bool Communicator::initFileCommunication(const Config &config)
 {
-    emit communicateRecoder("初始化文件通讯");
+    emit communicateLog("初始化文件通讯");
     // 检查文件路径是否有效
     if (config.filePath.isEmpty()) {
-        emit communicateRecoder("文件路径为空");
+        emit communicateLog("文件路径为空");
         return false;
     }
 
     // 创建文件对象
     m_file = new QFile(config.filePath, this);
     if (!m_file->open(QIODevice::ReadOnly)) {
-        emit communicateRecoder(QString("文件打开失败：%1").arg(m_file->errorString()));
+        emit communicateLog(QString("文件打开失败：%1").arg(m_file->errorString()));
         delete m_file;
         m_file = nullptr;
         return false;
@@ -119,7 +119,7 @@ bool Communicator::initFileCommunication(const Config &config)
     m_fileReadTimer->setInterval(config.readInterval);
     m_fileReadTimer->start();
 
-    emit communicateRecoder(QString("文件模式启动成功，路径：%1").arg(config.filePath));
+    emit communicateLog(QString("文件模式启动成功，路径：%1").arg(config.filePath));
     return true;
 }
 
@@ -130,7 +130,7 @@ bool Communicator::initFileCommunication(const Config &config)
  */
 bool Communicator::initTcpClientCommunication(const Config &config)
 {
-    emit communicateRecoder("初始化Tcp通讯");
+    emit communicateLog("初始化Tcp通讯");
     // 创建TCP客户端套接字
     m_tcpSocket = new QTcpSocket(this);
 
@@ -155,7 +155,7 @@ bool Communicator::initTcpClientCommunication(const Config &config)
             &QTcpSocket::disconnected,
             this,
             [this]() {
-                emit communicateRecoder("TCP客户端已断开连接");
+                emit communicateLog("TCP客户端已断开连接");
                 stopCommunication();});
 
     // 连接到TCP服务器
@@ -173,10 +173,10 @@ bool Communicator::initTcpClientCommunication(const Config &config)
  */
 bool Communicator::initSerialPortCommunication(const Config &config)
 {
-    emit communicateRecoder("初始化串口通讯");
+    emit communicateLog("初始化串口通讯");
     // 检查串口号是否有效
     if (config.serialPortName.isEmpty()) {
-        emit communicateRecoder("串口号为空");
+        emit communicateLog("串口号为空");
         return false;
     }
 
@@ -191,7 +191,7 @@ bool Communicator::initSerialPortCommunication(const Config &config)
 
     // 打开串口（读写模式）
     if (!m_serialPort->open(QIODevice::ReadWrite)) {
-        emit communicateRecoder(QString("串口打开失败：%1").arg(m_serialPort->errorString()));
+        emit communicateLog(QString("串口打开失败：%1").arg(m_serialPort->errorString()));
         delete m_serialPort;
         m_serialPort = nullptr;
         return false;
@@ -202,7 +202,7 @@ bool Communicator::initSerialPortCommunication(const Config &config)
     connect(m_serialPort, QOverload<QSerialPort::SerialPortError>::of(&QSerialPort::errorOccurred),
             this, &Communicator::onSerialPortError);
 
-    emit communicateRecoder(QString("串口启动成功，端口：%1，波特率：%2").arg(config.serialPortName).arg(config.baudRate));
+    emit communicateLog(QString("串口启动成功，端口：%1，波特率：%2").arg(config.serialPortName).arg(config.baudRate));
     return true;
 }
 
@@ -211,7 +211,7 @@ bool Communicator::initSerialPortCommunication(const Config &config)
  */
 void Communicator::releaseAllResources()
 {
-    emit communicateRecoder("释放所有资源");
+    emit communicateLog("释放所有资源");
     // 释放文件资源
     if (m_file) {
         m_file->close();
@@ -251,10 +251,10 @@ void Communicator::onFileReadTimerTimeout()
     if (rawData.isEmpty()) {
         // 读取到文件末尾
         if (m_file->atEnd()) {
-            emit communicateRecoder("文件读取完毕");
+            emit communicateLog("文件读取完毕");
             stopCommunication();
         } else {
-            emit communicateRecoder(QString("文件读取失败：%1").arg(m_file->errorString()));
+            emit communicateLog(QString("文件读取失败：%1").arg(m_file->errorString()));
         }
         return;
     }
@@ -268,7 +268,7 @@ void Communicator::onFileReadTimerTimeout()
  */
 void Communicator::onTcpClientConnected()
 {
-    emit communicateRecoder(QString("TCP客户端连接成功：%1:%2")
+    emit communicateLog(QString("TCP客户端连接成功：%1:%2")
                        .arg(m_currentConfig.tcpIp).arg(m_currentConfig.tcpPort));
 }
 
@@ -279,7 +279,7 @@ void Communicator::onTcpClientConnected()
 void Communicator::onTcpClientError(QAbstractSocket::SocketError socketError)
 {
     Q_UNUSED(socketError)
-    emit communicateRecoder(QString("TCP客户端错误：%1").arg(m_tcpSocket->errorString()));
+    emit communicateLog(QString("TCP客户端错误：%1").arg(m_tcpSocket->errorString()));
     stopCommunication();
 }
 
@@ -305,7 +305,7 @@ void Communicator::onTcpDataReady()
  */
 void Communicator::onTcpClientDisconnected()
 {
-    emit communicateRecoder("TCP客户端已断开连接");
+    emit communicateLog("TCP客户端已断开连接");
     if (m_tcpSocket) {
         m_tcpSocket->deleteLater();
         m_tcpSocket = nullptr;
@@ -338,6 +338,6 @@ void Communicator::onSerialPortError(QSerialPort::SerialPortError error)
         return;
     }
 
-    emit communicateRecoder(QString("串口错误：%1").arg(m_serialPort->errorString()));
+    emit communicateLog(QString("串口错误：%1").arg(m_serialPort->errorString()));
     stopCommunication();
 }

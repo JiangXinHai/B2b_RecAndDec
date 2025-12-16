@@ -27,7 +27,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     Communicator.cpp \
     Decoder.cpp \
-    Reciver.cpp \
+    Receiver.cpp \
     main.cpp \
     mainwindow.cpp \
     utils.cpp
@@ -35,7 +35,7 @@ SOURCES += \
 HEADERS += \
     Communicator.h \
     Decoder.h \
-    Reciver.h \
+    Receiver.h \
     mainwindow.h \
     utils.h
 

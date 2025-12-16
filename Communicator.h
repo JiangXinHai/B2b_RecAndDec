@@ -98,10 +98,10 @@ signals:
 
     /**
      * @brief 通讯器日志信号
-     * @param comMsg 错误描述信息
+     * @param logMsg 日志信息
      * @details 通讯过程中所有日志均通过此信号对外反馈
      */
-    void communicateRecoder(const QString &comMsg);
+    void communicateLog(const QString &logMsg);
 
     /**
      * @brief 通讯状态变化信号

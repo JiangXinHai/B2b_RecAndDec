@@ -12,6 +12,8 @@
 
 #include "Communicator.h"
 
+#include "Receiver.h"
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -25,11 +27,17 @@ private slots:
     void onStartBtnClicked();
     void onStopBtnClicked();
     void onBrowseFileBtnClicked();
+    void onClearLogBtnClicked();
+    void onClearDataBtnClicked();
 
     // 通讯器信号槽函数
     void onDataReady(const QByteArray &rawData);
-    void onCommunicateRecoder(const QString &comMsg);
+    void onCommunicateLog(const QString &logMsg);
     void onStateChanged(bool isRunning);
+
+    // 接收器信号槽函数
+    void onFrameReady(const QByteArray &rawFrame, uint8_t prn, uint8_t msgType);
+    void onReceiveLog(const QString &logMsg);
 
 private:
     // 构建配置参数（根据选中的通讯类型）
@@ -40,6 +48,9 @@ private:
 
     // 通讯器核心对象
     Communicator *m_communicator;
+
+    // 接收器核心对象
+    Receiver *m_receiver;
 };
 
 #endif // MAINWINDOW_H
